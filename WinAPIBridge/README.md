@@ -2,7 +2,7 @@
 
 WinAPIBridge is an extensible CLI for generating Win32 API interop declarations and example calls for PowerShell, C#, and VBA.
 
-The API catalog is data-driven and split across `apis*.json` files so categories can grow independently without changing generator logic.
+The API catalog is data-driven and split across `apis*.json` files so categories can grow independently without changing generator logic. Package data includes all `apis*.json` files when installed.
 
 ## Install
 
