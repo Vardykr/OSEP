@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "winapibridge"
-version = "0.1.0"
-description = "Generate Win32 interop declarations for PowerShell, C#, and VBA"
+version = "0.2.1"
+description = "Generate Win32 interop declarations for PowerShell, C#, and VBA from a 100+ API catalog"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
@@ -14,4 +14,4 @@ dependencies = []
 winapibridge = "winapibridge.cli:main"
 
 [tool.setuptools.package-data]
-winapibridge = ["apis.json"]
+winapibridge = ["apis*.json"]

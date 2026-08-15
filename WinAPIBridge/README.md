@@ -1,8 +1,8 @@
 # WinAPIBridge
 
-WinAPIBridge is a small, extensible CLI for generating Win32 API interop declarations and example calls for PowerShell, C#, and VBA.
+WinAPIBridge is an extensible CLI for generating Win32 API interop declarations and example calls for PowerShell, C#, and VBA.
 
-The API catalog is data-driven (`src/winapibridge/apis.json`), so new APIs can be added without changing the generator logic.
+The API catalog is data-driven and split across `apis*.json` files so categories can grow independently without changing generator logic. Package data includes all `apis*.json` files when installed.
 
 ## Install
 
@@ -17,100 +17,129 @@ Then use it from anywhere:
 ```bash
 winapibridge MessageBox
 winapibridge GetDriveType
-winapibridge GetDriveType --lang csharp
-winapibridge GetDriveType --lang vba
+winapibridge GetWindowsDirectory
+winapibridge GetSystemInfo
+winapibridge GetSystemTimeAsFileTime
+winapibridge GetEnvironmentVariable --lang csharp
+winapibridge GetWindowRect --lang csharp
+winapibridge GetUserName --lang vba
 winapibridge --list
+winapibridge --search volume
+winapibridge --search fileapi
 ```
 
-## Example
+## v0.2 marshalling support
+
+WinAPIBridge now supports more than simple scalar and pointer parameters. The generator understands metadata for:
+
+- `StringBuilder` output buffers
+- multiple output buffers and multiple `out` parameters
+- multi-line setup and result code (`prelude` / `postlude`)
+- custom per-language example calls
+- sequential Win32 structures
+- `out` / `ref` structure parameters
+- VBA `Type` generation
+- Win32 `void` functions as VBA `Declare PtrSafe Sub`
+- extra helper declarations used by an example
+- multiple `apis*.json` catalog files
+
+Representative APIs include:
+
+- `GetWindowsDirectory` -> `GetWindowsDirectoryW`
+- `GetSystemDirectory` -> `GetSystemDirectoryW`
+- `GetComputerName` -> `GetComputerNameW`
+- `GetUserName` -> `GetUserNameW`
+- `GetLogicalDriveStrings` -> `GetLogicalDriveStringsW`
+- `GetSystemInfo`
+- `GlobalMemoryStatusEx`
+- `GetLocalTime`
+- `GetSystemTime`
+- `GetSystemTimeAsFileTime`
+- `GetSystemTimePreciseAsFileTime`
+- `GetCursorPos`
+- `GetWindowRect`
+- `GetWindowText` -> `GetWindowTextW`
+- `GetEnvironmentVariable` -> `GetEnvironmentVariableW`
+- `ExpandEnvironmentStrings` -> `ExpandEnvironmentStringsW`
+- `GetModuleFileName` -> `GetModuleFileNameW`
+- `GetClassName` -> `GetClassNameW`
+- `GetFileSizeEx`
+- `GetFileTime`
+- `GetWindowThreadProcessId`
+
+The merged catalog now contains **100+ Win32 APIs**.
+
+## Searching the catalog
+
+Once the catalog is this large, `--search` is often faster than `--list`:
 
 ```bash
-winapibridge GetDriveType
+winapibridge --search volume
+winapibridge --search process
+winapibridge --search user32
+winapibridge --search fileapi
 ```
 
-`GetDriveType` resolves to the Unicode export `GetDriveTypeW` and generates a PowerShell `Add-Type` block plus an example invocation.
+Search covers the friendly name, canonical/export name, description, header, and DLL name.
 
-## API catalog
-
-The current catalog contains **57 Win32 APIs** across several practical categories:
-
-- system and timing information
-- process/thread identity and pseudo handles
-- processor and processor-group information
-- disk, drive, and file metadata
-- window/UI state and system metrics
-- locale, language, and code-page information
-- console information
-- path helper APIs
-
-Examples include:
-
-- `MessageBox` -> `MessageBoxW`
-- `GetDriveType` -> `GetDriveTypeW`
-- `GetCurrentProcessId`
-- `GetCurrentThreadId`
-- `GetCurrentProcess`
-- `GetCurrentThread`
-- `GetPhysicallyInstalledSystemMemory`
-- `GetTickCount`
-- `GetTickCount64`
-- `QueryPerformanceCounter`
-- `QueryPerformanceFrequency`
-- `GetLogicalDrives`
-- `GetFileAttributes` -> `GetFileAttributesW`
-- `GetCompressedFileSize` -> `GetCompressedFileSizeW`
-- `GetDiskFreeSpace` -> `GetDiskFreeSpaceW`
-- `GetDiskFreeSpaceEx` -> `GetDiskFreeSpaceExW`
-- `GetDesktopWindow`
-- `GetForegroundWindow`
-- `GetSystemMetrics`
-- `GetSysColor`
-- `GetKeyboardType`
-- `GetACP`
-- `GetOEMCP`
-- `GetUserDefaultLCID`
-- `GetConsoleCP`
-- `GetConsoleOutputCP`
-- `GetCurrentProcessorNumber`
-- `GetActiveProcessorCount`
-- `IsProcessorFeaturePresent`
-- `PathFileExists` -> `PathFileExistsW`
-- `PathIsDirectory` -> `PathIsDirectoryW`
-- `PathIsNetworkPath` -> `PathIsNetworkPathW`
-
-Run the following to see the complete list:
+## Example: output buffer
 
 ```bash
-winapibridge --list
+winapibridge GetWindowsDirectory
 ```
+
+The PowerShell output includes a C# P/Invoke declaration using `StringBuilder`, allocates a buffer, invokes the API, and prints the resulting path.
+
+## Example: structure
+
+```bash
+winapibridge GetSystemInfo --lang vba
+```
+
+The generated VBA includes a `SYSTEM_INFO` `Type`, a `Declare PtrSafe Sub GetSystemInfo`, an initialized variable, the API call, and a sample result display.
+
+## Example: FILETIME
+
+```bash
+winapibridge GetSystemTimeAsFileTime --lang csharp
+```
+
+The generated declaration includes a sequential `FILETIME` structure and the `out FILETIME` parameter mapping.
 
 ## Catalog metadata
 
-Each API entry can include:
+Each API entry may include:
 
 - friendly/lookup name
 - canonical/export name
-- DLL
-- generated class name
+- aliases
+- DLL and generated class name
 - description
 - Windows header name
 - Microsoft Learn documentation URL
-- original Win32 return type
-- C# and VBA return types
+- native Win32 return/parameter types
+- C# and VBA mappings
 - charset
-- original Win32 parameter types
-- C# and VBA parameter mappings
+- structures and fields
 - PowerShell/C#/VBA example arguments
-- optional example prelude
-- notes for special cases or deprecated APIs
+- setup/result statements
+- helper declarations
+- notes for special cases
 
-This keeps the catalog useful both for generation and as a Win32 API reference.
+## Adding APIs
 
-## Adding an API
+Add entries to an `apis*.json` file under `src/winapibridge/`. Prefer the Unicode (`W`) export when an API has ANSI/Unicode variants and verify the native signature against Microsoft Learn.
 
-Add a new entry to `src/winapibridge/apis.json`. Prefer the Unicode (`W`) export where a Windows API has ANSI/Unicode variants, and verify the native signature against Microsoft Learn.
+Splitting the catalog by category is encouraged as it grows, for example:
 
-Keeping signatures in JSON makes the project easy to expand, review, and eventually populate automatically from documentation metadata.
+```text
+apis.json
+apis_v2.json
+apis_v3.json
+apis_files.json
+apis_network.json
+apis_registry.json
+```
 
 ## Output targets
 
@@ -120,7 +149,7 @@ csharp
 vba
 ```
 
-Use `--signature-only` when you only want the declaration without an example call.
+Use `--signature-only` to omit example invocation code.
 
 ## Development
 
@@ -129,11 +158,11 @@ python -m pip install -e .
 python -m pytest
 ```
 
-The tests validate that the catalog is documented and that every catalog entry can generate a PowerShell, C#, and VBA declaration.
+Tests validate 100+ catalog entries, metadata, generation for all three languages, output-buffer marshalling, structure generation, FILETIME generation, and helper declarations.
 
 ## Notes
 
 - VBA output targets modern 64-bit Office and uses `PtrSafe`.
 - Unicode (`W`) variants are selected explicitly where appropriate.
-- APIs requiring structures, callbacks, unions, arrays, custom buffer management, or special marshalling should get explicit generator support rather than guessed signatures.
-- Signatures should be checked against Microsoft Learn before adding them to the catalog.
+- Complex unions, callbacks, variable-length arrays, and unusual custom marshalling should receive explicit generator support rather than guessed declarations.
+- Native signatures should be verified against Microsoft Learn before catalog inclusion.
