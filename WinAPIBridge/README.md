@@ -24,6 +24,8 @@ winapibridge GetEnvironmentVariable --lang csharp
 winapibridge GetWindowRect --lang csharp
 winapibridge GetUserName --lang vba
 winapibridge --list
+winapibridge --search volume
+winapibridge --search fileapi
 ```
 
 ## v0.2 marshalling support
@@ -66,6 +68,19 @@ Representative APIs include:
 - `GetWindowThreadProcessId`
 
 The merged catalog now contains **100+ Win32 APIs**.
+
+## Searching the catalog
+
+Once the catalog is this large, `--search` is often faster than `--list`:
+
+```bash
+winapibridge --search volume
+winapibridge --search process
+winapibridge --search user32
+winapibridge --search fileapi
+```
+
+Search covers the friendly name, canonical/export name, description, header, and DLL name.
 
 ## Example: output buffer
 
