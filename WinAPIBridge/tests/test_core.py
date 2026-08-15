@@ -21,7 +21,7 @@ def test_vba_pid():
 
 def test_catalog_is_large_and_documented():
     catalog = load_catalog()
-    assert len(catalog) >= 69
+    assert len(catalog) >= 100
 
     for name, spec in catalog.items():
         assert spec["canonical_name"]
@@ -64,3 +64,23 @@ def test_window_struct_and_helper_declaration():
     assert "public struct RECT" in out
     assert "GetForegroundWindow" in out
     assert "out RECT lpRect" in out
+
+
+def test_filetime_struct_generation():
+    out = generate("GetSystemTimeAsFileTime", "csharp", include_example=False)
+    assert "public struct FILETIME" in out
+    assert "out FILETIME lpSystemTimeAsFileTime" in out
+
+
+def test_additional_output_buffer_generation():
+    out = generate("GetEnvironmentVariable", "powershell", include_example=False)
+    assert "StringBuilder lpBuffer" in out
+    assert 'EntryPoint = "GetEnvironmentVariableW"' in out
+
+
+def test_multi_catalog_sources_are_merged():
+    catalog = load_catalog()
+    assert "MessageBox" in catalog
+    assert "GetSystemInfo" in catalog
+    assert "GetSystemTimeAsFileTime" in catalog
+    assert "GetEnvironmentVariable" in catalog
