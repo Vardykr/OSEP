@@ -84,3 +84,10 @@ def test_multi_catalog_sources_are_merged():
     assert "GetSystemInfo" in catalog
     assert "GetSystemTimeAsFileTime" in catalog
     assert "GetEnvironmentVariable" in catalog
+
+
+def test_catalog_has_searchable_metadata():
+    catalog = load_catalog()
+    assert any("volume" in spec.get("description", "").lower() for spec in catalog.values())
+    assert any(spec.get("header") == "fileapi.h" for spec in catalog.values())
+    assert any(spec.get("dll", "").lower() == "user32.dll" for spec in catalog.values())
