@@ -107,6 +107,8 @@ def _default_call(alias: str, spec: dict, lang: str) -> str:
         return f'[{spec["class"]}]::{alias}({args})'
     if lang == "csharp":
         return f'{spec["class"]}.{alias}({args});'
+    if spec.get("vba_kind", "Function") == "Sub":
+        return f'{alias} {args}'.rstrip()
     return f'MsgBox {alias}({args})'
 
 
