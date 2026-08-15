@@ -19,6 +19,8 @@ winapibridge MessageBox
 winapibridge GetDriveType
 winapibridge GetWindowsDirectory
 winapibridge GetSystemInfo
+winapibridge GetSystemTimeAsFileTime
+winapibridge GetEnvironmentVariable --lang csharp
 winapibridge GetWindowRect --lang csharp
 winapibridge GetUserName --lang vba
 winapibridge --list
@@ -29,6 +31,7 @@ winapibridge --list
 WinAPIBridge now supports more than simple scalar and pointer parameters. The generator understands metadata for:
 
 - `StringBuilder` output buffers
+- multiple output buffers and multiple `out` parameters
 - multi-line setup and result code (`prelude` / `postlude`)
 - custom per-language example calls
 - sequential Win32 structures
@@ -38,7 +41,7 @@ WinAPIBridge now supports more than simple scalar and pointer parameters. The ge
 - extra helper declarations used by an example
 - multiple `apis*.json` catalog files
 
-Representative v0.2 APIs include:
+Representative APIs include:
 
 - `GetWindowsDirectory` -> `GetWindowsDirectoryW`
 - `GetSystemDirectory` -> `GetSystemDirectoryW`
@@ -48,12 +51,21 @@ Representative v0.2 APIs include:
 - `GetSystemInfo`
 - `GlobalMemoryStatusEx`
 - `GetLocalTime`
+- `GetSystemTime`
+- `GetSystemTimeAsFileTime`
+- `GetSystemTimePreciseAsFileTime`
 - `GetCursorPos`
 - `GetWindowRect`
 - `GetWindowText` -> `GetWindowTextW`
+- `GetEnvironmentVariable` -> `GetEnvironmentVariableW`
+- `ExpandEnvironmentStrings` -> `ExpandEnvironmentStringsW`
+- `GetModuleFileName` -> `GetModuleFileNameW`
+- `GetClassName` -> `GetClassNameW`
+- `GetFileSizeEx`
+- `GetFileTime`
 - `GetWindowThreadProcessId`
 
-These are added on top of the existing v0.1 catalog, bringing the current catalog to at least 69 APIs.
+The merged catalog now contains **100+ Win32 APIs**.
 
 ## Example: output buffer
 
@@ -70,6 +82,14 @@ winapibridge GetSystemInfo --lang vba
 ```
 
 The generated VBA includes a `SYSTEM_INFO` `Type`, a `Declare PtrSafe Sub GetSystemInfo`, an initialized variable, the API call, and a sample result display.
+
+## Example: FILETIME
+
+```bash
+winapibridge GetSystemTimeAsFileTime --lang csharp
+```
+
+The generated declaration includes a sequential `FILETIME` structure and the `out FILETIME` parameter mapping.
 
 ## Catalog metadata
 
@@ -100,6 +120,7 @@ Splitting the catalog by category is encouraged as it grows, for example:
 ```text
 apis.json
 apis_v2.json
+apis_v3.json
 apis_files.json
 apis_network.json
 apis_registry.json
@@ -122,7 +143,7 @@ python -m pip install -e .
 python -m pytest
 ```
 
-Tests validate catalog metadata, generation for all three languages, output-buffer marshalling, structure generation, and helper declarations.
+Tests validate 100+ catalog entries, metadata, generation for all three languages, output-buffer marshalling, structure generation, FILETIME generation, and helper declarations.
 
 ## Notes
 
