@@ -3,62 +3,1604 @@
     "canonical_name": "MessageBoxW",
     "dll": "user32.dll",
     "class": "User32",
-    "return_type": {"csharp": "int", "vba": "Long"},
+    "description": "Displays a modal message box.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw",
+    "win32_return": "int",
+    "return_type": {
+      "csharp": "int",
+      "vba": "Long"
+    },
     "charset": "Unicode",
     "parameters": [
-      {"name": "hWnd", "csharp": "IntPtr", "vba": "LongPtr", "vba_by": "ByVal"},
-      {"name": "lpText", "csharp": "string", "vba": "LongPtr", "vba_by": "ByVal"},
-      {"name": "lpCaption", "csharp": "string", "vba": "LongPtr", "vba_by": "ByVal"},
-      {"name": "uType", "csharp": "uint", "vba": "Long", "vba_by": "ByVal"}
+      {
+        "name": "hWnd",
+        "win32": "HWND",
+        "csharp": "IntPtr",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "lpText",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "lpCaption",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "uType",
+        "win32": "UINT",
+        "csharp": "uint",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
     ],
     "example_args": {
-      "powershell": ["[IntPtr]::Zero", "\"This is an alert\"", "\"MyBox\"", "0"],
-      "csharp": ["IntPtr.Zero", "\"This is an alert\"", "\"MyBox\"", "0"],
-      "vba": ["0", "StrPtr(\"This is an alert\")", "StrPtr(\"MyBox\")", "0"]
+      "powershell": [
+        "[IntPtr]::Zero",
+        "\"This is an alert\"",
+        "\"MyBox\"",
+        "0"
+      ],
+      "csharp": [
+        "IntPtr.Zero",
+        "\"This is an alert\"",
+        "\"MyBox\"",
+        "0"
+      ],
+      "vba": [
+        "0",
+        "StrPtr(\"This is an alert\")",
+        "StrPtr(\"MyBox\")",
+        "0"
+      ]
     }
   },
   "GetDriveType": {
     "canonical_name": "GetDriveTypeW",
     "dll": "kernel32.dll",
     "class": "Kernel32",
-    "return_type": {"csharp": "uint", "vba": "Long"},
+    "description": "Determines the type of a disk drive.",
+    "header": "fileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdrivetypew",
+    "win32_return": "UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
     "charset": "Unicode",
     "parameters": [
-      {"name": "lpRootPathName", "csharp": "string", "vba": "LongPtr", "vba_by": "ByVal"}
+      {
+        "name": "lpRootPathName",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
     ],
     "example_args": {
-      "powershell": ["\"C:\\\\\""],
-      "csharp": ["@\"C:\\\""],
-      "vba": ["StrPtr(\"C:\\\")"]
+      "powershell": [
+        "\"C:\\\\\""
+      ],
+      "csharp": [
+        "@\"C:\\\""
+      ],
+      "vba": [
+        "StrPtr(\"C:\\\")"
+      ]
     }
   },
   "GetCurrentProcessId": {
     "canonical_name": "GetCurrentProcessId",
     "dll": "kernel32.dll",
     "class": "Kernel32",
-    "return_type": {"csharp": "uint", "vba": "Long"},
+    "description": "Returns the process identifier of the calling process.",
+    "header": "processthreadsapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessid",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
     "charset": null,
     "parameters": [],
-    "example_args": {"powershell": [], "csharp": [], "vba": []}
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetCurrentThreadId": {
+    "canonical_name": "GetCurrentThreadId",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the thread identifier of the calling thread.",
+    "header": "processthreadsapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentthreadid",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetCurrentProcess": {
+    "canonical_name": "GetCurrentProcess",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns a pseudo handle for the current process.",
+    "header": "processthreadsapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocess",
+    "win32_return": "HANDLE",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetCurrentThread": {
+    "canonical_name": "GetCurrentThread",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns a pseudo handle for the current thread.",
+    "header": "processthreadsapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentthread",
+    "win32_return": "HANDLE",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
   },
   "GetPhysicallyInstalledSystemMemory": {
     "canonical_name": "GetPhysicallyInstalledSystemMemory",
     "dll": "kernel32.dll",
     "class": "Kernel32",
-    "return_type": {"csharp": "bool", "vba": "Long"},
+    "description": "Retrieves the amount of physically installed RAM, in KB.",
+    "header": "sysinfoapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getphysicallyinstalledsystemmemory",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
     "charset": null,
     "parameters": [
-      {"name": "TotalMemoryInKilobytes", "csharp": "out ulong", "vba": "LongLong", "vba_by": "ByRef"}
+      {
+        "name": "TotalMemoryInKilobytes",
+        "win32": "PULONGLONG",
+        "csharp": "out ulong",
+        "vba": "LongLong",
+        "vba_by": "ByRef"
+      }
     ],
     "example_args": {
-      "powershell": ["[ref]$memoryKb"],
-      "csharp": ["out memoryKb"],
-      "vba": ["memoryKb"]
+      "powershell": [
+        "[ref]$memoryKb"
+      ],
+      "csharp": [
+        "out memoryKb"
+      ],
+      "vba": [
+        "memoryKb"
+      ]
     },
     "prelude": {
       "powershell": "$memoryKb = [UInt64]0",
       "csharp": "ulong memoryKb;",
       "vba": "Dim memoryKb As LongLong"
+    }
+  },
+  "GetTickCount": {
+    "canonical_name": "GetTickCount",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns milliseconds elapsed since system startup, wrapping after about 49.7 days.",
+    "header": "sysinfoapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetTickCount64": {
+    "canonical_name": "GetTickCount64",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns milliseconds elapsed since system startup as a 64-bit value.",
+    "header": "sysinfoapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount64",
+    "win32_return": "ULONGLONG",
+    "return_type": {
+      "csharp": "ulong",
+      "vba": "LongLong"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetVersion": {
+    "canonical_name": "GetVersion",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Legacy OS version query; behavior is affected by application manifests.",
+    "header": "sysinfoapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getversion",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    },
+    "notes": "Deprecated for determining the true Windows version; manifesting affects the reported value."
+  },
+  "QueryPerformanceCounter": {
+    "canonical_name": "QueryPerformanceCounter",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves the current value of the high-resolution performance counter.",
+    "header": "profileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "lpPerformanceCount",
+        "win32": "LARGE_INTEGER*",
+        "csharp": "out long",
+        "vba": "LongLong",
+        "vba_by": "ByRef"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[ref]$counter"
+      ],
+      "csharp": [
+        "out counter"
+      ],
+      "vba": [
+        "counter"
+      ]
+    },
+    "prelude": {
+      "powershell": "$counter = [Int64]0",
+      "csharp": "long counter;",
+      "vba": "Dim counter As LongLong"
+    }
+  },
+  "QueryPerformanceFrequency": {
+    "canonical_name": "QueryPerformanceFrequency",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves the frequency of the high-resolution performance counter.",
+    "header": "profileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancefrequency",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "lpFrequency",
+        "win32": "LARGE_INTEGER*",
+        "csharp": "out long",
+        "vba": "LongLong",
+        "vba_by": "ByRef"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[ref]$frequency"
+      ],
+      "csharp": [
+        "out frequency"
+      ],
+      "vba": [
+        "frequency"
+      ]
+    },
+    "prelude": {
+      "powershell": "$frequency = [Int64]0",
+      "csharp": "long frequency;",
+      "vba": "Dim frequency As LongLong"
+    }
+  },
+  "GetLogicalDrives": {
+    "canonical_name": "GetLogicalDrives",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns a bitmask representing currently available disk drives.",
+    "header": "fileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getlogicaldrives",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetFileAttributes": {
+    "canonical_name": "GetFileAttributesW",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves file-system attributes for a file or directory.",
+    "header": "fileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfileattributesw",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "lpFileName",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\Windows\""
+      ],
+      "csharp": [
+        "@\"C:\\Windows\""
+      ],
+      "vba": [
+        "StrPtr(\"C:\\Windows\")"
+      ]
+    }
+  },
+  "GetCompressedFileSize": {
+    "canonical_name": "GetCompressedFileSizeW",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves the actual number of bytes of disk storage used by a file.",
+    "header": "fileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getcompressedfilesizew",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "lpFileName",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "lpFileSizeHigh",
+        "win32": "LPDWORD",
+        "csharp": "out uint",
+        "vba": "Long",
+        "vba_by": "ByRef"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\Windows\\notepad.exe\"",
+        "[ref]$high"
+      ],
+      "csharp": [
+        "@\"C:\\Windows\\notepad.exe\"",
+        "out high"
+      ],
+      "vba": [
+        "StrPtr(\"C:\\Windows\\notepad.exe\")",
+        "high"
+      ]
+    },
+    "prelude": {
+      "powershell": "$high = [UInt32]0",
+      "csharp": "uint high;",
+      "vba": "Dim high As Long"
+    },
+    "notes": "A low-order return value of 0xFFFFFFFF is ambiguous; consult GetLastError to distinguish failure from a valid size."
+  },
+  "GetDiskFreeSpace": {
+    "canonical_name": "GetDiskFreeSpaceW",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves disk geometry and free-space values for a volume.",
+    "header": "fileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdiskfreespacew",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "lpRootPathName",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "lpSectorsPerCluster",
+        "win32": "LPDWORD",
+        "csharp": "out uint",
+        "vba": "Long",
+        "vba_by": "ByRef"
+      },
+      {
+        "name": "lpBytesPerSector",
+        "win32": "LPDWORD",
+        "csharp": "out uint",
+        "vba": "Long",
+        "vba_by": "ByRef"
+      },
+      {
+        "name": "lpNumberOfFreeClusters",
+        "win32": "LPDWORD",
+        "csharp": "out uint",
+        "vba": "Long",
+        "vba_by": "ByRef"
+      },
+      {
+        "name": "lpTotalNumberOfClusters",
+        "win32": "LPDWORD",
+        "csharp": "out uint",
+        "vba": "Long",
+        "vba_by": "ByRef"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\\\\"",
+        "[ref]$spc",
+        "[ref]$bps",
+        "[ref]$free",
+        "[ref]$total"
+      ],
+      "csharp": [
+        "@\"C:\\\"",
+        "out spc",
+        "out bps",
+        "out free",
+        "out total"
+      ],
+      "vba": [
+        "StrPtr(\"C:\\\")",
+        "spc",
+        "bps",
+        "freeClusters",
+        "totalClusters"
+      ]
+    },
+    "prelude": {
+      "powershell": "$spc=[UInt32]0; $bps=[UInt32]0; $free=[UInt32]0; $total=[UInt32]0",
+      "csharp": "uint spc, bps, free, total;",
+      "vba": "Dim spc As Long, bps As Long, freeClusters As Long, totalClusters As Long"
+    }
+  },
+  "GetDiskFreeSpaceEx": {
+    "canonical_name": "GetDiskFreeSpaceExW",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves available and total disk-space information.",
+    "header": "fileapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getdiskfreespaceexw",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "lpDirectoryName",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "lpFreeBytesAvailableToCaller",
+        "win32": "PULARGE_INTEGER",
+        "csharp": "out ulong",
+        "vba": "LongLong",
+        "vba_by": "ByRef"
+      },
+      {
+        "name": "lpTotalNumberOfBytes",
+        "win32": "PULARGE_INTEGER",
+        "csharp": "out ulong",
+        "vba": "LongLong",
+        "vba_by": "ByRef"
+      },
+      {
+        "name": "lpTotalNumberOfFreeBytes",
+        "win32": "PULARGE_INTEGER",
+        "csharp": "out ulong",
+        "vba": "LongLong",
+        "vba_by": "ByRef"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\\\\"",
+        "[ref]$freeToCaller",
+        "[ref]$totalBytes",
+        "[ref]$totalFree"
+      ],
+      "csharp": [
+        "@\"C:\\\"",
+        "out freeToCaller",
+        "out totalBytes",
+        "out totalFree"
+      ],
+      "vba": [
+        "StrPtr(\"C:\\\")",
+        "freeToCaller",
+        "totalBytes",
+        "totalFree"
+      ]
+    },
+    "prelude": {
+      "powershell": "$freeToCaller=[UInt64]0; $totalBytes=[UInt64]0; $totalFree=[UInt64]0",
+      "csharp": "ulong freeToCaller, totalBytes, totalFree;",
+      "vba": "Dim freeToCaller As LongLong, totalBytes As LongLong, totalFree As LongLong"
+    }
+  },
+  "GetDesktopWindow": {
+    "canonical_name": "GetDesktopWindow",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns a handle to the desktop window.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdesktopwindow",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetForegroundWindow": {
+    "canonical_name": "GetForegroundWindow",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns a handle to the foreground window.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getforegroundwindow",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetActiveWindow": {
+    "canonical_name": "GetActiveWindow",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns the active window attached to the calling thread's message queue.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getactivewindow",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetFocus": {
+    "canonical_name": "GetFocus",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns the window that has keyboard focus for the calling thread.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getfocus",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetCapture": {
+    "canonical_name": "GetCapture",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns the window that has captured the mouse, if any.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcapture",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetShellWindow": {
+    "canonical_name": "GetShellWindow",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns a handle to the Shell desktop window.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getshellwindow",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetDoubleClickTime": {
+    "canonical_name": "GetDoubleClickTime",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns the current double-click time in milliseconds.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime",
+    "win32_return": "DWORD/UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetCaretBlinkTime": {
+    "canonical_name": "GetCaretBlinkTime",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns the caret blink interval in milliseconds.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcaretblinktime",
+    "win32_return": "DWORD/UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetClipboardSequenceNumber": {
+    "canonical_name": "GetClipboardSequenceNumber",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns the clipboard sequence number.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclipboardsequencenumber",
+    "win32_return": "DWORD/UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetSystemMetrics": {
+    "canonical_name": "GetSystemMetrics",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Retrieves a system metric or system configuration setting.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics",
+    "win32_return": "int",
+    "return_type": {
+      "csharp": "int",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "nIndex",
+        "win32": "int",
+        "csharp": "int",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "0"
+      ],
+      "csharp": [
+        "0"
+      ],
+      "vba": [
+        "0"
+      ]
+    }
+  },
+  "IsWindow": {
+    "canonical_name": "IsWindow",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Determines whether the specified handle identifies an existing window.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-iswindow",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "hWnd",
+        "win32": "HWND",
+        "csharp": "IntPtr",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[IntPtr]::Zero"
+      ],
+      "csharp": [
+        "IntPtr.Zero"
+      ],
+      "vba": [
+        "0"
+      ]
+    }
+  },
+  "IsWindowVisible": {
+    "canonical_name": "IsWindowVisible",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Retrieves the visibility state of a window.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-iswindowvisible",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "hWnd",
+        "win32": "HWND",
+        "csharp": "IntPtr",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[IntPtr]::Zero"
+      ],
+      "csharp": [
+        "IntPtr.Zero"
+      ],
+      "vba": [
+        "0"
+      ]
+    }
+  },
+  "IsWindowEnabled": {
+    "canonical_name": "IsWindowEnabled",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Determines whether a window is enabled for input.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-iswindowenabled",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "hWnd",
+        "win32": "HWND",
+        "csharp": "IntPtr",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[IntPtr]::Zero"
+      ],
+      "csharp": [
+        "IntPtr.Zero"
+      ],
+      "vba": [
+        "0"
+      ]
+    }
+  },
+  "MessageBeep": {
+    "canonical_name": "MessageBeep",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Plays a waveform sound associated with a system event.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebeep",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "uType",
+        "win32": "UINT",
+        "csharp": "uint",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "0"
+      ],
+      "csharp": [
+        "0"
+      ],
+      "vba": [
+        "0"
+      ]
+    }
+  },
+  "GetSysColor": {
+    "canonical_name": "GetSysColor",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Retrieves the current color of a display element.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsyscolor",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "nIndex",
+        "win32": "int",
+        "csharp": "int",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "5"
+      ],
+      "csharp": [
+        "5"
+      ],
+      "vba": [
+        "5"
+      ]
+    }
+  },
+  "GetDialogBaseUnits": {
+    "canonical_name": "GetDialogBaseUnits",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Returns system dialog base units.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdialogbaseunits",
+    "win32_return": "LONG",
+    "return_type": {
+      "csharp": "int",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetKeyboardType": {
+    "canonical_name": "GetKeyboardType",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Retrieves information about the current keyboard.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardtype",
+    "win32_return": "int",
+    "return_type": {
+      "csharp": "int",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "nTypeFlag",
+        "win32": "int",
+        "csharp": "int",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "0"
+      ],
+      "csharp": [
+        "0"
+      ],
+      "vba": [
+        "0"
+      ]
+    }
+  },
+  "GetInputState": {
+    "canonical_name": "GetInputState",
+    "dll": "user32.dll",
+    "class": "User32",
+    "description": "Determines whether mouse-button or keyboard messages are in the calling thread's queue.",
+    "header": "winuser.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getinputstate",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetACP": {
+    "canonical_name": "GetACP",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the current Windows ANSI code page identifier.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getacp",
+    "win32_return": "UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetOEMCP": {
+    "canonical_name": "GetOEMCP",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the current OEM code page identifier.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getoemcp",
+    "win32_return": "UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "IsValidCodePage": {
+    "canonical_name": "IsValidCodePage",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Determines whether a code page is installed or supported by the operating system.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-isvalidcodepage",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "CodePage",
+        "win32": "UINT",
+        "csharp": "uint",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "65001"
+      ],
+      "csharp": [
+        "65001"
+      ],
+      "vba": [
+        "65001"
+      ]
+    }
+  },
+  "GetUserDefaultLCID": {
+    "canonical_name": "GetUserDefaultLCID",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the user default locale identifier.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlcid",
+    "win32_return": "LCID",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetSystemDefaultLCID": {
+    "canonical_name": "GetSystemDefaultLCID",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the system default locale identifier.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlcid",
+    "win32_return": "LCID",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetUserDefaultLangID": {
+    "canonical_name": "GetUserDefaultLangID",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the language identifier for the current user.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultlangid",
+    "win32_return": "LANGID",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetSystemDefaultLangID": {
+    "canonical_name": "GetSystemDefaultLangID",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the language identifier for the system locale.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultlangid",
+    "win32_return": "LANGID",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetUserDefaultUILanguage": {
+    "canonical_name": "GetUserDefaultUILanguage",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the default UI language identifier for the current user.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getuserdefaultuilanguage",
+    "win32_return": "LANGID",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetSystemDefaultUILanguage": {
+    "canonical_name": "GetSystemDefaultUILanguage",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the default UI language identifier for the operating system.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getsystemdefaultuilanguage",
+    "win32_return": "LANGID",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetThreadUILanguage": {
+    "canonical_name": "GetThreadUILanguage",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the UI language identifier for the current thread.",
+    "header": "winnls.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getthreaduilanguage",
+    "win32_return": "LANGID",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetConsoleCP": {
+    "canonical_name": "GetConsoleCP",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the input code page used by the console associated with the calling process.",
+    "header": "consoleapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/consoleapi/nf-consoleapi-getconsolecp",
+    "win32_return": "UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetConsoleOutputCP": {
+    "canonical_name": "GetConsoleOutputCP",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the output code page used by the console.",
+    "header": "consoleapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/consoleapi/nf-consoleapi-getconsoleoutputcp",
+    "win32_return": "UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetConsoleWindow": {
+    "canonical_name": "GetConsoleWindow",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Retrieves the window handle used by the console associated with the calling process.",
+    "header": "wincon.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/wincon/nf-wincon-getconsolewindow",
+    "win32_return": "HWND",
+    "return_type": {
+      "csharp": "IntPtr",
+      "vba": "LongPtr"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetCurrentProcessorNumber": {
+    "canonical_name": "GetCurrentProcessorNumber",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the number of the processor on which the current thread was running.",
+    "header": "processthreadsapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocessornumber",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetActiveProcessorGroupCount": {
+    "canonical_name": "GetActiveProcessorGroupCount",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the number of active processor groups in the system.",
+    "header": "processtopologyapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processtopologyapi/nf-processtopologyapi-getactiveprocessorgroupcount",
+    "win32_return": "WORD",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetMaximumProcessorGroupCount": {
+    "canonical_name": "GetMaximumProcessorGroupCount",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the maximum number of processor groups that the system can have.",
+    "header": "processtopologyapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processtopologyapi/nf-processtopologyapi-getmaximumprocessorgroupcount",
+    "win32_return": "WORD",
+    "return_type": {
+      "csharp": "ushort",
+      "vba": "Integer"
+    },
+    "charset": null,
+    "parameters": [],
+    "example_args": {
+      "powershell": [],
+      "csharp": [],
+      "vba": []
+    }
+  },
+  "GetActiveProcessorCount": {
+    "canonical_name": "GetActiveProcessorCount",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the number of active processors in a processor group; ALL_PROCESSOR_GROUPS is 0xFFFF.",
+    "header": "processtopologyapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processtopologyapi/nf-processtopologyapi-getactiveprocessorcount",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "GroupNumber",
+        "win32": "WORD",
+        "csharp": "ushort",
+        "vba": "Integer",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[UInt16]65535"
+      ],
+      "csharp": [
+        "(ushort)0xFFFF"
+      ],
+      "vba": [
+        "-1"
+      ]
+    }
+  },
+  "GetMaximumProcessorCount": {
+    "canonical_name": "GetMaximumProcessorCount",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Returns the maximum number of processors in a processor group.",
+    "header": "processtopologyapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processtopologyapi/nf-processtopologyapi-getmaximumprocessorcount",
+    "win32_return": "DWORD",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "GroupNumber",
+        "win32": "WORD",
+        "csharp": "ushort",
+        "vba": "Integer",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "[UInt16]65535"
+      ],
+      "csharp": [
+        "(ushort)0xFFFF"
+      ],
+      "vba": [
+        "-1"
+      ]
+    }
+  },
+  "IsProcessorFeaturePresent": {
+    "canonical_name": "IsProcessorFeaturePresent",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Determines whether the specified processor feature is supported.",
+    "header": "processthreadsapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": null,
+    "parameters": [
+      {
+        "name": "ProcessorFeature",
+        "win32": "DWORD",
+        "csharp": "uint",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "10"
+      ],
+      "csharp": [
+        "10"
+      ],
+      "vba": [
+        "10"
+      ]
+    }
+  },
+  "PathFileExists": {
+    "canonical_name": "PathFileExistsW",
+    "dll": "shlwapi.dll",
+    "class": "Shlwapi",
+    "description": "Determines whether a path to a file-system object is valid.",
+    "header": "shlwapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-pathfileexistsw",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "pszPath",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\Windows\""
+      ],
+      "csharp": [
+        "@\"C:\\Windows\""
+      ],
+      "vba": [
+        "StrPtr(\"C:\\Windows\")"
+      ]
+    }
+  },
+  "PathIsDirectory": {
+    "canonical_name": "PathIsDirectoryW",
+    "dll": "shlwapi.dll",
+    "class": "Shlwapi",
+    "description": "Determines whether a path is a valid directory.",
+    "header": "shlwapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-pathisdirectoryw",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "pszPath",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\Windows\""
+      ],
+      "csharp": [
+        "@\"C:\\Windows\""
+      ],
+      "vba": [
+        "StrPtr(\"C:\\Windows\")"
+      ]
+    }
+  },
+  "PathIsNetworkPath": {
+    "canonical_name": "PathIsNetworkPathW",
+    "dll": "shlwapi.dll",
+    "class": "Shlwapi",
+    "description": "Determines whether a path represents a network resource.",
+    "header": "shlwapi.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-pathisnetworkpathw",
+    "win32_return": "BOOL",
+    "return_type": {
+      "csharp": "bool",
+      "vba": "Long"
+    },
+    "charset": "Unicode",
+    "parameters": [
+      {
+        "name": "pszPath",
+        "win32": "LPCWSTR",
+        "csharp": "string",
+        "vba": "LongPtr",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"C:\\Windows\""
+      ],
+      "csharp": [
+        "@\"C:\\Windows\""
+      ],
+      "vba": [
+        "StrPtr(\"C:\\Windows\")"
+      ]
     }
   }
 }
