@@ -20,31 +20,33 @@ def resolve_api(name: str) -> tuple[str, dict]:
 
 
 def _dllimport(spec: dict) -> str:
-    args = [f'\"{spec["dll"]}\"']
+    args = [f'"{spec["dll"]}"']
     if spec.get("charset"):
         args.append(f'CharSet = CharSet.{spec["charset"]}')
-    args.append(f'EntryPoint = \"{spec["canonical_name"]}\"')
+    args.append(f'EntryPoint = "{spec["canonical_name"]}"')
     return f"[DllImport({', '.join(args)})]"
 
 
-def generate_csharp(name: str, include_example: bool = True) -> str:
-    alias, spec = resolve_api(name)
+def _csharp_signature(alias: str, spec: dict) -> str:
     params = ",\n        ".join(
         f'{p["csharp"]} {p["name"]}' for p in spec["parameters"]
     )
     if params:
-        signature = (
+        return (
             f'{_dllimport(spec)}\n'
             f'public static extern {spec["return_type"]["csharp"]} {alias}(\n'
             f'        {params}\n'
             f');'
         )
-    else:
-        signature = (
-            f'{_dllimport(spec)}\n'
-            f'public static extern {spec["return_type"]["csharp"]} {alias}();'
-        )
+    return (
+        f'{_dllimport(spec)}\n'
+        f'public static extern {spec["return_type"]["csharp"]} {alias}();'
+    )
 
+
+def generate_csharp(name: str, include_example: bool = True) -> str:
+    alias, spec = resolve_api(name)
+    signature = _csharp_signature(alias, spec)
     code = (
         "using System;\n"
         "using System.Runtime.InteropServices;\n\n"
@@ -53,7 +55,6 @@ def generate_csharp(name: str, include_example: bool = True) -> str:
         + "    " + signature.replace("\n", "\n    ") + "\n"
         "}"
     )
-
     if include_example:
         pre = spec.get("prelude", {}).get("csharp")
         call = f'{spec["class"]}.{alias}({", ".join(spec["example_args"]["csharp"])});'
@@ -66,22 +67,7 @@ def generate_csharp(name: str, include_example: bool = True) -> str:
 
 def generate_powershell(name: str, include_example: bool = True) -> str:
     alias, spec = resolve_api(name)
-    params = ",\n        ".join(
-        f'{p["csharp"]} {p["name"]}' for p in spec["parameters"]
-    )
-    if params:
-        signature = (
-            f'{_dllimport(spec)}\n'
-            f'public static extern {spec["return_type"]["csharp"]} {alias}(\n'
-            f'        {params}\n'
-            f');'
-        )
-    else:
-        signature = (
-            f'{_dllimport(spec)}\n'
-            f'public static extern {spec["return_type"]["csharp"]} {alias}();'
-        )
-
+    signature = _csharp_signature(alias, spec)
     var = f'${spec["class"]}'
     code = (
         f'{var} = @"\n'
@@ -94,11 +80,9 @@ def generate_powershell(name: str, include_example: bool = True) -> str:
         '"@\n\n'
         f"Add-Type {var}"
     )
-
     if include_example:
         pre = spec.get("prelude", {}).get("powershell")
-        call = f'[{spec["class"]}]::{alias}({", ".join(spec["example_args"]["powershell"])} )'
-        call = call.replace("() ", "()")
+        call = f'[{spec["class"]}]::{alias}({", ".join(spec["example_args"]["powershell"])})'
         code += "\n\n"
         if pre:
             code += pre + "\n"
@@ -124,7 +108,6 @@ def generate_vba(name: str, include_example: bool = True) -> str:
             f'Private Declare PtrSafe Function {alias} Lib "{spec["dll"]}" () '
             f'As {spec["return_type"]["vba"]}'
         )
-
     if not include_example:
         return decl
 
