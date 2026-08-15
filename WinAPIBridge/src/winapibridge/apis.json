@@ -1,0 +1,64 @@
+{
+  "MessageBox": {
+    "canonical_name": "MessageBoxW",
+    "dll": "user32.dll",
+    "class": "User32",
+    "return_type": {"csharp": "int", "vba": "Long"},
+    "charset": "Unicode",
+    "parameters": [
+      {"name": "hWnd", "csharp": "IntPtr", "vba": "LongPtr", "vba_by": "ByVal"},
+      {"name": "lpText", "csharp": "string", "vba": "LongPtr", "vba_by": "ByVal"},
+      {"name": "lpCaption", "csharp": "string", "vba": "LongPtr", "vba_by": "ByVal"},
+      {"name": "uType", "csharp": "uint", "vba": "Long", "vba_by": "ByVal"}
+    ],
+    "example_args": {
+      "powershell": ["[IntPtr]::Zero", "\"This is an alert\"", "\"MyBox\"", "0"],
+      "csharp": ["IntPtr.Zero", "\"This is an alert\"", "\"MyBox\"", "0"],
+      "vba": ["0", "StrPtr(\"This is an alert\")", "StrPtr(\"MyBox\")", "0"]
+    }
+  },
+  "GetDriveType": {
+    "canonical_name": "GetDriveTypeW",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "return_type": {"csharp": "uint", "vba": "Long"},
+    "charset": "Unicode",
+    "parameters": [
+      {"name": "lpRootPathName", "csharp": "string", "vba": "LongPtr", "vba_by": "ByVal"}
+    ],
+    "example_args": {
+      "powershell": ["\"C:\\\\\""],
+      "csharp": ["@\"C:\\\""],
+      "vba": ["StrPtr(\"C:\\\")"]
+    }
+  },
+  "GetCurrentProcessId": {
+    "canonical_name": "GetCurrentProcessId",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "return_type": {"csharp": "uint", "vba": "Long"},
+    "charset": null,
+    "parameters": [],
+    "example_args": {"powershell": [], "csharp": [], "vba": []}
+  },
+  "GetPhysicallyInstalledSystemMemory": {
+    "canonical_name": "GetPhysicallyInstalledSystemMemory",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "return_type": {"csharp": "bool", "vba": "Long"},
+    "charset": null,
+    "parameters": [
+      {"name": "TotalMemoryInKilobytes", "csharp": "out ulong", "vba": "LongLong", "vba_by": "ByRef"}
+    ],
+    "example_args": {
+      "powershell": ["[ref]$memoryKb"],
+      "csharp": ["out memoryKb"],
+      "vba": ["memoryKb"]
+    },
+    "prelude": {
+      "powershell": "$memoryKb = [UInt64]0",
+      "csharp": "ulong memoryKb;",
+      "vba": "Dim memoryKb As LongLong"
+    }
+  }
+}
