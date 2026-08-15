@@ -21,7 +21,7 @@ def test_vba_pid():
 
 def test_catalog_is_large_and_documented():
     catalog = load_catalog()
-    assert len(catalog) >= 50
+    assert len(catalog) >= 69
 
     for name, spec in catalog.items():
         assert spec["canonical_name"]
@@ -36,8 +36,31 @@ def test_catalog_is_large_and_documented():
 
 def test_every_catalog_entry_generates_all_languages():
     catalog = load_catalog()
-
     for name in catalog:
         for lang in ("powershell", "csharp", "vba"):
             out = generate(name, lang, include_example=False)
             assert out.strip(), f"empty output for {name} / {lang}"
+
+
+def test_stringbuilder_marshalling():
+    out = generate("GetWindowsDirectory", "powershell")
+    assert "using System.Text;" in out
+    assert "StringBuilder lpBuffer" in out
+    assert "$buffer = [Text.StringBuilder]::new(260)" in out
+
+
+def test_struct_marshalling():
+    out = generate("GetSystemInfo", "csharp")
+    assert "public struct SYSTEM_INFO" in out
+    assert "out SYSTEM_INFO lpSystemInfo" in out
+
+    vba = generate("GetSystemInfo", "vba")
+    assert "Private Type SYSTEM_INFO" in vba
+    assert "Declare PtrSafe Sub GetSystemInfo" in vba
+
+
+def test_window_struct_and_helper_declaration():
+    out = generate("GetWindowRect", "powershell")
+    assert "public struct RECT" in out
+    assert "GetForegroundWindow" in out
+    assert "out RECT lpRect" in out
