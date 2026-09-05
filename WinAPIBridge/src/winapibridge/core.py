@@ -166,6 +166,158 @@ def generate_powershell(name: str, include_example: bool = True) -> str:
     return code
 
 
+_REFLECTION_TYPES = {
+    "IntPtr": "[IntPtr]",
+    "UIntPtr": "[UIntPtr]",
+    "string": "[String]",
+    "StringBuilder": "[Text.StringBuilder]",
+    "uint": "[UInt32]",
+    "int": "[Int32]",
+    "ulong": "[UInt64]",
+    "long": "[Int64]",
+    "ushort": "[UInt16]",
+    "short": "[Int16]",
+    "byte": "[Byte]",
+    "bool": "[Bool]",
+    "void": "[Void]",
+}
+
+
+def _reflection_type_expr(csharp_type: str, spec: dict) -> str:
+    byref = False
+    base = csharp_type.strip()
+    if base.startswith("out ") or base.startswith("ref "):
+        byref = True
+        base = base.split(" ", 1)[1]
+
+    if base in {s["name"] for s in spec.get("structs", [])}:
+        raise ValueError(
+            f"Reflective PowerShell does not yet emit dynamic struct types ({base}). "
+            "Use --ps-mode add-type for this API."
+        )
+
+    mapped = _REFLECTION_TYPES.get(base)
+    if not mapped:
+        raise ValueError(
+            f"Reflective PowerShell type mapping is not implemented for '{csharp_type}'. "
+            "Use --ps-mode add-type for this API."
+        )
+    if byref:
+        return f"{mapped}.MakeByRefType()"
+    return mapped
+
+
+def _reflection_entry_point(spec: dict) -> str:
+    """Use ANSI exports for reflected string marshalling, matching the PEN-300 pattern."""
+    explicit = spec.get("reflection_entry_point")
+    if explicit:
+        return explicit
+    name = spec["canonical_name"]
+    if name.endswith("W") and spec.get("charset") == "Unicode":
+        return name[:-1] + "A"
+    return name
+
+
+def generate_powershell_reflection(name: str, include_example: bool = True) -> str:
+    """Generate a Windows PowerShell 5.1 Reflection.Emit invocation without Add-Type.
+
+    This backend intentionally supports scalar/string/StringBuilder and primitive by-ref
+    signatures first. APIs that require emitted Win32 structs currently fall back to the
+    normal Add-Type backend.
+    """
+    alias, spec = resolve_api(name)
+    param_types = [
+        _reflection_type_expr(p["csharp"], spec) for p in spec.get("parameters", [])
+    ]
+    return_type = _reflection_type_expr(spec["return_type"]["csharp"], spec)
+    entry_point = _reflection_entry_point(spec)
+    delegate_var = f'${alias}Delegate'
+    function_var = f'${alias}'
+
+    helpers = r'''function LookupFunc {
+    Param ($moduleName, $functionName)
+
+    $assem = ([AppDomain]::CurrentDomain.GetAssemblies() |
+        Where-Object {
+            $_.GlobalAssemblyCache -And
+            $_.Location.Split('\\')[-1].Equals('System.dll')
+        }).GetType('Microsoft.Win32.UnsafeNativeMethods')
+
+    $matches = @()
+    $assem.GetMethods() | ForEach-Object {
+        if ($_.Name -eq 'GetProcAddress') { $matches += $_ }
+    }
+
+    return $matches[0].Invoke(
+        $null,
+        @(
+            ($assem.GetMethod('GetModuleHandle')).Invoke($null, @($moduleName)),
+            $functionName
+        )
+    )
+}
+
+function Get-DelegateType {
+    Param (
+        [Parameter(Position = 0, Mandatory = $True)] [Type[]] $ParameterTypes,
+        [Parameter(Position = 1)] [Type] $ReturnType = [Void]
+    )
+
+    $type = [AppDomain]::CurrentDomain.
+        DefineDynamicAssembly(
+            (New-Object System.Reflection.AssemblyName('ReflectedDelegate')),
+            [System.Reflection.Emit.AssemblyBuilderAccess]::Run
+        ).
+        DefineDynamicModule('InMemoryModule', $false).
+        DefineType(
+            ('MyDelegateType_' + [Guid]::NewGuid().ToString('N')),
+            'Class, Public, Sealed, AnsiClass, AutoClass',
+            [System.MulticastDelegate]
+        )
+
+    $type.
+        DefineConstructor(
+            'RTSpecialName, HideBySig, Public',
+            [System.Reflection.CallingConventions]::Standard,
+            $ParameterTypes
+        ).SetImplementationFlags('Runtime, Managed')
+
+    $type.
+        DefineMethod(
+            'Invoke',
+            'Public, HideBySig, NewSlot, Virtual',
+            $ReturnType,
+            $ParameterTypes
+        ).SetImplementationFlags('Runtime, Managed')
+
+    return $type.CreateType()
+}'''
+
+    param_array = "@(" + ", ".join(param_types) + ")"
+    if not param_types:
+        param_array = "[Type[]]@()"
+
+    code = (
+        "# Reflective PowerShell backend: Windows PowerShell 5.1 / .NET Framework\n"
+        "# Resolves the API from loaded System.dll metadata and avoids Add-Type.\n\n"
+        + helpers
+        + "\n\n"
+        + f'$addr = LookupFunc "{spec["dll"]}" "{entry_point}"\n'
+        + f'{delegate_var} = Get-DelegateType {param_array} ({return_type})\n'
+        + f'{function_var} = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($addr, {delegate_var})'
+    )
+
+    if include_example:
+        pre = _lines(spec.get("prelude", {}).get("powershell"))
+        args = ", ".join(spec.get("example_args", {}).get("powershell", []))
+        call = f'$result = {function_var}.Invoke({args})'
+        post = _lines(spec.get("postlude", {}).get("powershell"))
+        code += "\n\n" + "\n".join(pre + [call] + post)
+        if not post and spec["return_type"]["csharp"] != "void":
+            code += "\n$result"
+    return code
+
+
 def generate_vba(name: str, include_example: bool = True) -> str:
     alias, spec = resolve_api(name)
     params = ", _\n        ".join(
@@ -217,12 +369,25 @@ def generate_vba(name: str, include_example: bool = True) -> str:
     return "\n".join(lines)
 
 
-def generate(name: str, lang: str, include_example: bool = True) -> str:
+def generate(
+    name: str,
+    lang: str,
+    include_example: bool = True,
+    powershell_mode: str = "add-type",
+) -> str:
     lang = lang.lower()
     if lang in {"ps", "powershell"}:
+        if powershell_mode == "reflection":
+            return generate_powershell_reflection(name, include_example)
+        if powershell_mode != "add-type":
+            raise ValueError("powershell_mode must be one of: add-type, reflection")
         return generate_powershell(name, include_example)
     if lang in {"cs", "csharp"}:
+        if powershell_mode != "add-type":
+            raise ValueError("--ps-mode only applies to PowerShell output")
         return generate_csharp(name, include_example)
     if lang == "vba":
+        if powershell_mode != "add-type":
+            raise ValueError("--ps-mode only applies to PowerShell output")
         return generate_vba(name, include_example)
     raise ValueError("lang must be one of: powershell, csharp, vba")
