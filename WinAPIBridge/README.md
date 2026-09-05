@@ -17,20 +17,57 @@ Then use it from anywhere:
 ```bash
 winapibridge MessageBox
 winapibridge GetDriveType
+winapibridge WinExec
 winapibridge GetWindowsDirectory
 winapibridge GetSystemInfo
-winapibridge GetSystemTimeAsFileTime
 winapibridge GetEnvironmentVariable --lang csharp
 winapibridge GetWindowRect --lang csharp
 winapibridge GetUserName --lang vba
 winapibridge --list
 winapibridge --search volume
-winapibridge --search fileapi
 ```
 
-## v0.2 marshalling support
+## Reflective PowerShell mode
 
-WinAPIBridge now supports more than simple scalar and pointer parameters. The generator understands metadata for:
+PowerShell output now has two backends:
+
+```text
+add-type     default C# P/Invoke + Add-Type backend
+reflection   Reflection.Emit delegate backend for Windows PowerShell 5.1/.NET Framework
+```
+
+Examples:
+
+```bash
+winapibridge MessageBox --ps-mode reflection
+winapibridge WinExec --ps-mode reflection
+winapibridge GetDriveType --ps-mode reflection
+winapibridge GetCurrentProcessId --ps-mode reflection --signature-only
+```
+
+The reflection backend generates reusable `LookupFunc` and `Get-DelegateType` helpers, resolves the export through `Microsoft.Win32.UnsafeNativeMethods`, creates a delegate type in memory with `Reflection.Emit`, and calls the function through `Marshal.GetDelegateForFunctionPointer`.
+
+For catalog entries that normally target a Unicode `W` export, reflective mode currently resolves the corresponding ANSI `A` export when available. This matches the classic Windows PowerShell/.NET Framework reflection pattern and keeps string delegate marshalling predictable without `Add-Type`.
+
+Current reflective support covers:
+
+- scalar integer and pointer types
+- strings
+- `StringBuilder`
+- primitive `out` / `ref` parameters
+- APIs with no parameters
+
+Win32 structures are intentionally not guessed in reflective mode yet. For APIs such as `GetSystemInfo`, use the normal backend:
+
+```bash
+winapibridge GetSystemInfo --ps-mode add-type
+```
+
+The CLI returns a clear error when a reflected signature needs a dynamic structure that the backend does not yet emit.
+
+## v0.2+ marshalling support
+
+The normal generator supports more than simple scalar and pointer parameters, including:
 
 - `StringBuilder` output buffers
 - multiple output buffers and multiple `out` parameters
@@ -43,35 +80,11 @@ WinAPIBridge now supports more than simple scalar and pointer parameters. The ge
 - extra helper declarations used by an example
 - multiple `apis*.json` catalog files
 
-Representative APIs include:
+Representative APIs include `MessageBox`, `GetDriveType`, `WinExec`, `GetWindowsDirectory`, `GetComputerName`, `GetUserName`, `GetSystemInfo`, `GlobalMemoryStatusEx`, `GetLocalTime`, `GetCursorPos`, `GetWindowRect`, `GetWindowText`, `GetEnvironmentVariable`, `GetModuleFileName`, `GetFileSizeEx`, and many more.
 
-- `GetWindowsDirectory` -> `GetWindowsDirectoryW`
-- `GetSystemDirectory` -> `GetSystemDirectoryW`
-- `GetComputerName` -> `GetComputerNameW`
-- `GetUserName` -> `GetUserNameW`
-- `GetLogicalDriveStrings` -> `GetLogicalDriveStringsW`
-- `GetSystemInfo`
-- `GlobalMemoryStatusEx`
-- `GetLocalTime`
-- `GetSystemTime`
-- `GetSystemTimeAsFileTime`
-- `GetSystemTimePreciseAsFileTime`
-- `GetCursorPos`
-- `GetWindowRect`
-- `GetWindowText` -> `GetWindowTextW`
-- `GetEnvironmentVariable` -> `GetEnvironmentVariableW`
-- `ExpandEnvironmentStrings` -> `ExpandEnvironmentStringsW`
-- `GetModuleFileName` -> `GetModuleFileNameW`
-- `GetClassName` -> `GetClassNameW`
-- `GetFileSizeEx`
-- `GetFileTime`
-- `GetWindowThreadProcessId`
-
-The merged catalog now contains **100+ Win32 APIs**.
+The merged catalog contains **100+ Win32 APIs**.
 
 ## Searching the catalog
-
-Once the catalog is this large, `--search` is often faster than `--list`:
 
 ```bash
 winapibridge --search volume
@@ -81,30 +94,6 @@ winapibridge --search fileapi
 ```
 
 Search covers the friendly name, canonical/export name, description, header, and DLL name.
-
-## Example: output buffer
-
-```bash
-winapibridge GetWindowsDirectory
-```
-
-The PowerShell output includes a C# P/Invoke declaration using `StringBuilder`, allocates a buffer, invokes the API, and prints the resulting path.
-
-## Example: structure
-
-```bash
-winapibridge GetSystemInfo --lang vba
-```
-
-The generated VBA includes a `SYSTEM_INFO` `Type`, a `Declare PtrSafe Sub GetSystemInfo`, an initialized variable, the API call, and a sample result display.
-
-## Example: FILETIME
-
-```bash
-winapibridge GetSystemTimeAsFileTime --lang csharp
-```
-
-The generated declaration includes a sequential `FILETIME` structure and the `out FILETIME` parameter mapping.
 
 ## Catalog metadata
 
@@ -128,18 +117,7 @@ Each API entry may include:
 
 ## Adding APIs
 
-Add entries to an `apis*.json` file under `src/winapibridge/`. Prefer the Unicode (`W`) export when an API has ANSI/Unicode variants and verify the native signature against Microsoft Learn.
-
-Splitting the catalog by category is encouraged as it grows, for example:
-
-```text
-apis.json
-apis_v2.json
-apis_v3.json
-apis_files.json
-apis_network.json
-apis_registry.json
-```
+Add entries to an `apis*.json` file under `src/winapibridge/`. Prefer the Unicode (`W`) export for normal P/Invoke output when an API has ANSI/Unicode variants and verify the native signature against Microsoft Learn.
 
 ## Output targets
 
@@ -158,11 +136,11 @@ python -m pip install -e .
 python -m pytest
 ```
 
-Tests validate 100+ catalog entries, metadata, generation for all three languages, output-buffer marshalling, structure generation, FILETIME generation, and helper declarations.
+Tests validate the 100+ API catalog, all three normal output languages, output-buffer marshalling, structures, and the reflective PowerShell backend for scalar/string/by-ref signatures.
 
 ## Notes
 
+- Reflective mode targets Windows PowerShell 5.1 / .NET Framework semantics; PowerShell 7/.NET may expose different internal runtime types.
 - VBA output targets modern 64-bit Office and uses `PtrSafe`.
-- Unicode (`W`) variants are selected explicitly where appropriate.
 - Complex unions, callbacks, variable-length arrays, and unusual custom marshalling should receive explicit generator support rather than guessed declarations.
 - Native signatures should be verified against Microsoft Learn before catalog inclusion.
