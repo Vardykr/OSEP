@@ -102,3 +102,52 @@ def test_catalog_has_searchable_metadata():
     assert any("volume" in spec.get("description", "").lower() for spec in catalog.values())
     assert any(spec.get("header") == "fileapi.h" for spec in catalog.values())
     assert any(spec.get("dll", "").lower() == "user32.dll" for spec in catalog.values())
+
+
+def test_reflective_messagebox_backend():
+    out = generate("MessageBox", "powershell", powershell_mode="reflection")
+    assert "function LookupFunc" in out
+    assert "function Get-DelegateType" in out
+    assert "GetDelegateForFunctionPointer" in out
+    assert 'LookupFunc "user32.dll" "MessageBoxA"' in out
+    assert "@([IntPtr], [String], [String], [UInt32])" in out
+    assert "$MessageBox.Invoke" in out
+    assert "Add-Type" not in out
+
+
+def test_reflective_winexec_backend():
+    out = generate("WinExec", "powershell", powershell_mode="reflection")
+    assert 'LookupFunc "kernel32.dll" "WinExec"' in out
+    assert "@([String], [UInt32])" in out
+    assert '$WinExec.Invoke("notepad.exe", 1)' in out
+
+
+def test_reflective_noarg_backend():
+    out = generate(
+        "GetCurrentProcessId",
+        "powershell",
+        include_example=False,
+        powershell_mode="reflection",
+    )
+    assert "[Type[]]@()" in out
+    assert "([UInt32])" in out
+    assert 'LookupFunc "kernel32.dll" "GetCurrentProcessId"' in out
+
+
+def test_reflective_primitive_byref_backend():
+    out = generate(
+        "GetPhysicallyInstalledSystemMemory",
+        "powershell",
+        powershell_mode="reflection",
+    )
+    assert "[UInt64].MakeByRefType()" in out
+    assert "[ref]$memoryKb" in out
+
+
+def test_reflective_structs_fail_with_clear_message():
+    try:
+        generate("GetSystemInfo", "powershell", powershell_mode="reflection")
+    except ValueError as exc:
+        assert "does not yet emit dynamic struct types" in str(exc)
+    else:
+        raise AssertionError("struct-based reflective generation should fail clearly")
