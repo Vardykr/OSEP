@@ -19,6 +19,16 @@ def test_vba_pid():
     assert 'Declare PtrSafe Function GetCurrentProcessId' in out
 
 
+def test_winexec_generation():
+    out = generate("WinExec", "powershell")
+    assert 'kernel32.dll' in out
+    assert 'CharSet = CharSet.Ansi' in out
+    assert 'EntryPoint = "WinExec"' in out
+    assert 'string lpCmdLine' in out
+    assert 'uint uCmdShow' in out
+    assert '[Kernel32]::WinExec("notepad.exe", 1)' in out
+
+
 def test_catalog_is_large_and_documented():
     catalog = load_catalog()
     assert len(catalog) >= 100
@@ -84,6 +94,7 @@ def test_multi_catalog_sources_are_merged():
     assert "GetSystemInfo" in catalog
     assert "GetSystemTimeAsFileTime" in catalog
     assert "GetEnvironmentVariable" in catalog
+    assert "WinExec" in catalog
 
 
 def test_catalog_has_searchable_metadata():
