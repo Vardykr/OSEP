@@ -1,0 +1,47 @@
+{
+  "WinExec": {
+    "canonical_name": "WinExec",
+    "dll": "kernel32.dll",
+    "class": "Kernel32",
+    "description": "Runs the specified application. Legacy API retained for 16-bit Windows compatibility; Microsoft recommends CreateProcess for new applications.",
+    "header": "winbase.h",
+    "docs": "https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-winexec",
+    "win32_return": "UINT",
+    "return_type": {
+      "csharp": "uint",
+      "vba": "Long"
+    },
+    "charset": "Ansi",
+    "parameters": [
+      {
+        "name": "lpCmdLine",
+        "win32": "LPCSTR",
+        "csharp": "string",
+        "vba": "String",
+        "vba_by": "ByVal"
+      },
+      {
+        "name": "uCmdShow",
+        "win32": "UINT",
+        "csharp": "uint",
+        "vba": "Long",
+        "vba_by": "ByVal"
+      }
+    ],
+    "example_args": {
+      "powershell": [
+        "\"notepad.exe\"",
+        "1"
+      ],
+      "csharp": [
+        "\"notepad.exe\"",
+        "1"
+      ],
+      "vba": [
+        "\"notepad.exe\"",
+        "1"
+      ]
+    },
+    "notes": "WinExec succeeds with a return value greater than 31. It is a legacy API; prefer CreateProcess in new software."
+  }
+}
