@@ -112,7 +112,7 @@ def test_reflective_messagebox_backend():
     assert 'LookupFunc "user32.dll" "MessageBoxA"' in out
     assert "@([IntPtr], [String], [String], [UInt32])" in out
     assert "$MessageBox.Invoke" in out
-    assert "Add-Type" not in out
+    assert "[DllImport(" not in out
 
 
 def test_reflective_winexec_backend():
