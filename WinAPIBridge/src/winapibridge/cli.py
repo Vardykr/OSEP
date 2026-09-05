@@ -19,6 +19,15 @@ def main() -> None:
         help="Output language (default: powershell)",
     )
     parser.add_argument(
+        "--ps-mode",
+        choices=["add-type", "reflection"],
+        default="add-type",
+        help=(
+            "PowerShell backend: add-type (default) or reflection. "
+            "Reflection targets Windows PowerShell 5.1/.NET Framework and avoids Add-Type."
+        ),
+    )
+    parser.add_argument(
         "--signature-only",
         action="store_true",
         help="Omit example invocation",
@@ -56,8 +65,18 @@ def main() -> None:
     if not args.api:
         parser.error("API name is required unless --list or --search is used")
 
+    if args.lang != "powershell" and args.ps_mode != "add-type":
+        parser.error("--ps-mode only applies to --lang powershell")
+
     try:
-        print(generate(args.api, args.lang, not args.signature_only))
+        print(
+            generate(
+                args.api,
+                args.lang,
+                not args.signature_only,
+                powershell_mode=args.ps_mode,
+            )
+        )
     except (KeyError, ValueError) as exc:
         parser.error(str(exc))
 
